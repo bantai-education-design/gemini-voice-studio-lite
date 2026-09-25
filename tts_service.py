@@ -67,15 +67,19 @@ def build_tts_prompt(text: str, style_instruction: str = "") -> str:
             f"【読み上げ本文】\n{cleaned_text}"
         )
 
+import time
+
 def generate_speech(
     text: str,
     voice_name: str = "Puck",
     style_instruction: str = "",
     model_name: str = DEFAULT_MODEL,
-    api_key: Optional[str] = None
+    api_key: Optional[str] = None,
+    max_retries: int = 3
 ) -> Tuple[bytes, str]:
     """
     Gemini APIを呼び出して音声を生成し、WAVバイト列とMIMEタイプを返す
+    一時的なサーバー混雑（503 UNAVAILABLE等）に対して自動再試行を実施
     """
     key = api_key or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     if not key:
@@ -95,11 +99,39 @@ def generate_speech(
         )
     )
 
-    response = client.models.generate_content(
-        model=model_name,
-        contents=prompt,
-        config=config
-    )
+    last_error = None
+    response = None
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=config
+            )
+            break
+        except Exception as e:
+            last_error = e
+            err_str = str(e)
+            # 503 UNAVAILABLE または 429 RESOURCE_EXHAUSTED の場合は少し待機して再試行
+            if ("503" in err_str or "UNAVAILABLE" in err_str or "429" in err_str or "high demand" in err_str) and attempt < max_retries:
+                wait_time = attempt * 2.5
+                time.sleep(wait_time)
+                continue
+            else:
+                break
+
+    if response is None:
+        err_msg = str(last_error)
+        if "503" in err_msg or "high demand" in err_msg:
+            raise RuntimeError(
+                f"現在Geminiサーバー（{model_name}）が一時的に混雑しています。\n"
+                "数十秒ほど待ってから再度お試しいただくか、サイドバーの「使用モデル」を別のモデルに切り替えてお試しください。"
+            )
+        elif "404" in err_msg:
+            raise RuntimeError(f"指定されたモデル（{model_name}）が見つかりません。別のモデルを選択してください。\n詳細: {err_msg}")
+        else:
+            raise RuntimeError(f"API呼び出し中にエラーが発生しました:\n{err_msg}")
 
     audio_bytes = None
     mime_type = "audio/wav"
