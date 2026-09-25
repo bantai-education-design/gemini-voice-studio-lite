@@ -1,6 +1,6 @@
 # Gemini Voice Studio Lite
 
-Gemini APIの音声生成（Text-to-Speech / Speech Generation）機能を活用し、入力したテキストから自然な音声を生成・再生・WAV保存できるシンプルなWebUIアプリケーションです。
+Gemini APIの音声生成（Text-to-Speech / Speech Generation）機能を活用し、入力したテキストから自然な音声を生成・再生・WAV保存・Excel管理できるシンプルなWebUIアプリケーションです。
 
 ## 主な特徴
 
@@ -14,10 +14,22 @@ Gemini APIの音声生成（Text-to-Speech / Speech Generation）機能を活用
   - 「明るく元気なトーンで」「落ち着いたニュースキャスター風に」「絵本朗読のように優しく」など、自然言語のプロンプトで声のニュアンスを自在にコントロール可能。
 - リアルタイム試聴とWAVダウンロード
   - 生成された音声データをブラウザ上で即座にプレビュー再生し、非可逆圧縮のない標準WAV形式でローカルに保存可能。
-- 生成履歴の管理
-  - セッション中に生成した過去の音声をリスト形式で一覧・再試聴可能。
+- 生成履歴の管理とExcelエクスポート機能
+  - セッション中に生成した過去の音声を一覧表示・個別再試聴・再保存できるほか、生成メタデータ（日時、キャラクター、トーン、文字数、ファイルサイズ等）を一括でExcelファイル（.xlsx）として出力・保存可能。
 - 柔軟なAPIキー設定
   - `.env` ファイルによる永続設定、および画面上（サイドバー）からの直接入力の両方に対応。
+
+## 開発計画書・システム仕様書（Excelファイル）
+
+本プロジェクトの全設計書・仕様書を網羅したExcelファイルを同梱しています。
+- ファイル名: `Gemini_Voice_Studio_Lite_開発計画・仕様書.xlsx`
+- 構成シート:
+  1. 表紙・プロジェクト概要
+  2. 機能要件定義
+  3. 画面・UI設計書
+  4. API・音声仕様
+  5. テスト仕様書・検証結果
+  6. WBS・開発工程管理表
 
 ## 必要要件
 
@@ -58,8 +70,10 @@ streamlit run app.py
 
 ## ファイル構成
 
-- `app.py`: StreamlitによるUI画面と操作ロジック
+- `app.py`: StreamlitによるUI画面、操作ロジック、Excel履歴エクスポート機能
 - `tts_service.py`: Gemini API呼び出しおよびPCMからWAVヘッダー付与・変換ロジック
+- `create_excel_docs.py`: 仕様書・計画書Excelファイルを生成するスクリプト
+- `Gemini_Voice_Studio_Lite_開発計画・仕様書.xlsx`: 総合開発計画書・システム仕様書
 - `requirements.txt`: 必要なPythonパッケージ一覧
 - `.env.example`: 環境変数設定テンプレート
 - `.gitignore`: Git除外設定ファイル
