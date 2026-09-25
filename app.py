@@ -68,13 +68,29 @@ with st.sidebar:
     st.header("⚙️ 設定・環境")
 
     # APIキー設定
+    env_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
     env_api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY") or ""
+    
     api_key_input = st.text_input(
         "Gemini API キー",
         value=env_api_key,
         type="password",
-        help="Google AI Studioで取得したAPIキーを入力してください。.envファイルにも保存可能です。"
+        help="Google AI Studioで取得したAPIキーを入力してください。「保存」を押すと次回以降自動入力されます。"
     )
+
+    if api_key_input:
+        if api_key_input == env_api_key and os.path.exists(env_file_path):
+            st.caption("✅ 保存済みAPIキーを使用中（自動入力有効）")
+        else:
+            if st.button("💾 このキーをPCに保存（次回以降自動入力）", use_container_width=True):
+                try:
+                    with open(env_file_path, "w", encoding="utf-8") as f:
+                        f.write(f"GEMINI_API_KEY={api_key_input.strip()}\n")
+                    os.environ["GEMINI_API_KEY"] = api_key_input.strip()
+                    st.success("APIキーを保存しました！次回以降は入力不要です。")
+                    st.rerun()
+                except Exception as ex:
+                    st.error(f"保存エラー: {ex}")
 
     st.divider()
 
