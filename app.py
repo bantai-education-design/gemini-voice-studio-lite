@@ -82,9 +82,9 @@ with st.sidebar:
     st.subheader("🤖 モデル設定")
     model_option = st.selectbox(
         "使用モデル",
-        options=["gemini-2.5-flash", "gemini-2.0-flash"],
+        options=["gemini-3.8-flash", "gemini-3.0-flash", "gemini-2.5-flash"],
         index=0,
-        help="通常は応答速度と品質に優れた gemini-2.5-flash を推奨します。"
+        help="最新の音声生成対応モデル gemini-3.8-flash を推奨します。"
     )
 
     st.divider()

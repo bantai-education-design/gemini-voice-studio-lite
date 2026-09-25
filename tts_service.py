@@ -11,7 +11,7 @@ from typing import Optional, Tuple
 from google import genai
 from google.genai import types
 
-DEFAULT_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gemini-3.8-flash"
 SUPPORTED_VOICES = {
     "Puck": "親しみやすく軽快なトーン（中音域）",
     "Charon": "落ち着きと深みのある低音トーン",

@@ -57,7 +57,7 @@ def build_excel_documentation(output_path: str):
         ("リポジトリ", "https://github.com/bantai-education-design/gemini-voice-studio-lite"),
         ("プロジェクト目的", "テキストを入力し、指定した声のトーンやスタイルで自然な日本語音声を高速生成・試聴・WAV保存・Excel管理できる直感的なデスクトップWebUIの提供。"),
         ("主要技術スタック", "Python 3.13, Streamlit, Google GenAI SDK (google-genai), openpyxl, pandas"),
-        ("利用AIモデル", "Gemini 2.5 Flash / Gemini 2.0 Flash (Speech Generation対応)"),
+        ("利用AIモデル", "Gemini 3.8 Flash / Gemini 3.0 Flash (Speech Generation対応)"),
         ("対応プラットフォーム", "Windows, macOS, Linux (Webブラウザ環境)"),
     ]
 
@@ -160,7 +160,7 @@ def build_excel_documentation(output_path: str):
 
     ui_data = [
         ("サイドバー", "パスワード入力", "Gemini API キー", "Google AI StudioのAPIキーを入力。.envからの初期値自動補完あり。マスク表示。", "必須入力（未入力時エラー警告）"),
-        ("サイドバー", "セレクトボックス", "使用モデル", "音声生成に対応したGeminiモデルを選択。", "gemini-2.5-flash（初期値）, gemini-2.0-flash"),
+        ("サイドバー", "セレクトボックス", "使用モデル", "音声生成に対応したGeminiモデルを選択。", "gemini-3.8-flash（初期値）, gemini-3.0-flash"),
         ("サイドバー", "セレクトボックス", "プリセット音声", "声質キャラクターを選択。選択時に特徴説明文をガイドカードで表示。", "Puck, Charon, Kore, Fenrir, Aoede"),
         ("メイン（左列）", "ボタン群", "例文サンプル", "日常の挨拶、館内アナウンス、物語朗読をクリックするとテキストエリアに瞬時にセット。", "3種類のプリセットテキスト"),
         ("メイン（左列）", "テキストエリア", "読み上げ本文", "読み上げさせたい文章を入力。文字数をリアルタイムカウント表示。", "1000文字超の場合に警告メッセージ表示"),
